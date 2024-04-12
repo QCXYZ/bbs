@@ -27,14 +27,17 @@ public class UserService {
 
     public User validateUser(String username, String password) throws Exception {
         User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new Exception("用户不存在!");
+        }
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new Exception("密码错误");
+            throw new Exception("密码错误!");
         }
         return user;
     }
 
     public User updateUserProfile(Long userId, String avatar, String nickname, String bio) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("用户不存在!"));
         user.setAvatar(avatar);
         user.setNickname(nickname);
         user.setBio(bio);
@@ -42,9 +45,9 @@ public class UserService {
     }
 
     public void updatePassword(Long userId, String oldPassword, String newPassword) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("用户不存在!"));
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new RuntimeException("Old password does not match.");
+            throw new RuntimeException("旧密码不匹配。");
         }
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
