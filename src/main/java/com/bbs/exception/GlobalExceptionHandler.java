@@ -25,20 +25,20 @@ public class GlobalExceptionHandler {
             });
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } else if (ex instanceof NullPointerException) {
-            response.put("信息", "空指针异常");
+            response.put("message", "空指针异常");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 
 
         } else if (ex instanceof ResourceNotFoundException) {
-            response.put("信息", ex.getMessage());
+            response.put("message", ex.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 
 
         } else if (ex instanceof RuntimeException) {
-            response.put("信息", ex.getMessage());
+            response.put("message", ex.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } else {  // 通用异常处理
-            response.put("信息", ex.getMessage());
+            response.put("message", ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }

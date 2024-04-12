@@ -59,9 +59,9 @@ public class UserController {
     public ResponseEntity<Map<String, String>> updateUserProfile(@PathVariable Long user_id,
                                                                  @RequestBody User user) {
         User updatedUser = userService.updateUserProfile(user_id, user.getAvatar(), user.getNickname(), user.getBio());
+        log.info("updatedUser: {}", updatedUser);
         Map<String, String> response = new HashMap<>();
-//        response.put("user_id", updatedUser.getId().toString());
-        response.put("message", "User profile updated successfully");
+        response.put("message", "用户资料更新成功");
         return ResponseEntity.ok(response);
     }
 
@@ -71,7 +71,7 @@ public class UserController {
                                                               @RequestParam String newPassword) {
         userService.updatePassword(user_id, oldPassword, newPassword);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Password updated successfully");
+        response.put("message", "密码更新成功");
         return ResponseEntity.ok(response);
     }
 }
