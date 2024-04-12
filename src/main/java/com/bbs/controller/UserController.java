@@ -30,8 +30,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) throws Exception {
-        User registeredUser = userService.registerUser(user.getUsername(), user.getPassword(), user.getEmail());
+    public ResponseEntity<?> register(@RequestBody User user) throws Exception {
+        User registeredUser = userService.register(
+                user.getUsername(), user.getPassword(), user.getEmail());
         Map<String, Object> response = new HashMap<>();
         response.put("user_id", registeredUser.getId());
         response.put("message", "用户注册成功");
@@ -39,9 +40,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestParam String username,
-                                       @RequestParam String password) throws Exception {
+    public ResponseEntity<?> login(
+            @RequestParam String username,
+            @RequestParam String password) throws Exception {
         User user = userService.validateUser(username, password);
+
         Map<String, Object> response = new HashMap<>();
         response.put("token", generateToken(user));
         response.put("user_id", user.getId());
@@ -51,25 +54,30 @@ public class UserController {
 
     @GetMapping("/{user_id}/profile")
     public ResponseEntity<?> getUserProfile(@PathVariable Long user_id) {
-        User user = userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + user_id));
+        User user = userRepository.findById(user_id).orElseThrow(()
+                -> new ResourceNotFoundException("User not found with id: " + user_id));
         return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{user_id}/profile")
-    public ResponseEntity<Map<String, String>> updateUserProfile(@PathVariable Long user_id,
-                                                                 @RequestBody User user) {
-        User updatedUser = userService.updateUserProfile(user_id, user.getAvatar(), user.getNickname(), user.getBio());
-        log.info("updatedUser: {}", updatedUser);
+    public ResponseEntity<Map<String, String>> updateUserProfile(
+            @PathVariable Long user_id,
+            @RequestBody User user) {
+        User updatedUser = userService.updateUserProfile(
+                user_id, user.getAvatar(), user.getNickname(), user.getBio());
+        log.info("更新的用户信息: {}", updatedUser);
         Map<String, String> response = new HashMap<>();
         response.put("message", "用户资料更新成功");
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{user_id}/password")
-    public ResponseEntity<Map<String, String>> updatePassword(@PathVariable Long user_id,
-                                                              @RequestParam String oldPassword,
-                                                              @RequestParam String newPassword) {
+    public ResponseEntity<Map<String, String>> updatePassword(
+            @PathVariable Long user_id,
+            @RequestParam String oldPassword,
+            @RequestParam String newPassword) {
         userService.updatePassword(user_id, oldPassword, newPassword);
+
         Map<String, String> response = new HashMap<>();
         response.put("message", "密码更新成功");
         return ResponseEntity.ok(response);

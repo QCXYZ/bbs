@@ -14,7 +14,7 @@ public class UserService {
     @Resource
     private PasswordEncoder passwordEncoder;
 
-    public User registerUser(String username, String password, String email) throws Exception {
+    public User register(String username, String password, String email) throws Exception {
         if (userRepository.existsByUsername(username) || userRepository.existsByEmail(email)) {
             throw new Exception("用户或邮箱已存在。");
         }
