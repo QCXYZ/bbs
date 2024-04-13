@@ -27,10 +27,8 @@ public class UserService {
     }
 
     public User validateUser(String username, String password) {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new RuntimeException("用户不存在!");
-        }
+        User user = userRepository.findByUsername(username).orElseThrow(()
+                -> new RuntimeException("用户不存在。"));
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("密码错误!");
         }
