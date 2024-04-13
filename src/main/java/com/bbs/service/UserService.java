@@ -4,11 +4,10 @@ import com.bbs.entity.User;
 import com.bbs.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
-@Transactional
+//@Transactional
 @Service
 public class UserService {
     @Resource
