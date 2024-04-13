@@ -43,13 +43,13 @@ public class UserService {
                 -> new RuntimeException("用户不存在!"));
     }
 
-    public User updateUserProfile(Long userId, String avatar, String nickname, String bio) {
+    public void updateUserProfile(Long userId, String avatar, String nickname, String bio) {
         User user = userRepository.findById(userId).orElseThrow(()
                 -> new RuntimeException("用户不存在!"));
         user.setAvatar(avatar);
         user.setNickname(nickname);
         user.setBio(bio);
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     public void updatePassword(Long userId, String oldPassword, String newPassword) {

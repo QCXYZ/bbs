@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.bbs.entity.User;
 import com.bbs.service.UserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +11,6 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -59,9 +57,8 @@ public class UserController {
     public ResponseEntity<Map<String, String>> updateUserProfile(
             @PathVariable Long user_id,
             @RequestBody User user) {
-        User updatedUser = userService.updateUserProfile(user_id, user.getAvatar(), user.getNickname(), user.getBio());
+        userService.updateUserProfile(user_id, user.getAvatar(), user.getNickname(), user.getBio());
 
-        log.info("更新的用户信息: {}", updatedUser);
         Map<String, String> response = new HashMap<>();
         response.put("message", "用户资料更新成功");
         return ResponseEntity.ok(response);
