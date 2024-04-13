@@ -3,8 +3,6 @@ package com.bbs.controller;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.bbs.entity.User;
-import com.bbs.exception.ResourceNotFoundException;
-import com.bbs.repository.UserRepository;
 import com.bbs.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +18,6 @@ import java.util.Map;
 public class UserController {
     @Resource
     private UserService userService;
-    @Resource
-    private UserRepository userRepository;
 
     private String generateToken(User user) {
         return JWT.create()
@@ -30,9 +26,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) throws Exception {
-        User registeredUser = userService.register(
-                user.getUsername(), user.getPassword(), user.getEmail());
+    public ResponseEntity<?> register(@RequestBody User user) {
+        User registeredUser = userService.register(user.getUsername(), user.getPassword(), user.getEmail());
+
         Map<String, Object> response = new HashMap<>();
         response.put("user_id", registeredUser.getId());
         response.put("message", "用户注册成功");
@@ -42,7 +38,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(
             @RequestParam String username,
-            @RequestParam String password) throws Exception {
+            @RequestParam String password) {
         User user = userService.validateUser(username, password);
 
         Map<String, Object> response = new HashMap<>();
@@ -54,8 +50,8 @@ public class UserController {
 
     @GetMapping("/{user_id}/profile")
     public ResponseEntity<?> getUserProfile(@PathVariable Long user_id) {
-        User user = userRepository.findById(user_id).orElseThrow(()
-                -> new ResourceNotFoundException("User not found with id: " + user_id));
+        User user = userService.getUser(user_id);
+
         return ResponseEntity.ok(user);
     }
 
@@ -63,8 +59,8 @@ public class UserController {
     public ResponseEntity<Map<String, String>> updateUserProfile(
             @PathVariable Long user_id,
             @RequestBody User user) {
-        User updatedUser = userService.updateUserProfile(
-                user_id, user.getAvatar(), user.getNickname(), user.getBio());
+        User updatedUser = userService.updateUserProfile(user_id, user.getAvatar(), user.getNickname(), user.getBio());
+
         log.info("更新的用户信息: {}", updatedUser);
         Map<String, String> response = new HashMap<>();
         response.put("message", "用户资料更新成功");
