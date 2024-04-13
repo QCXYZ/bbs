@@ -3,7 +3,6 @@ package com.bbs.controller;
 import com.bbs.entity.Content;
 import com.bbs.service.ContentService;
 import com.bbs.util.ContentType;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/content")
 public class ContentController {
